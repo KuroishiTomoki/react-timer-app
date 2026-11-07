@@ -17,10 +17,25 @@ function App() {
 
   const [content, setContent] = useState("");
   const [time, setTime] = useState(0);
+  const [error, setError] = useState("");
+  const [sumTime, setSumTime] = useState(0);
 
   const onRegister = () =>{
-    setContent("");
-    setTime(0);
+    if(content == "" || time <= 0){
+      setError(true);
+      return;
+    }
+    else{
+      setError(false);
+    }
+
+    const newRecords = [...records, {title:content, time:time}];
+    setRecords(newRecords);
+
+    setSumTime(sumTime + parseInt(time, 10));
+
+     setContent("");
+     setTime(0);
   }
 
   return (
@@ -32,9 +47,12 @@ function App() {
       <InputOutput title="入力されている学習内容" text={content}/>
       <InputOutput title="入力されている学習時間" text={time}/>
       <RegisterButton onRegister={onRegister}/>
-      
-      <Log logs = {records} />
 
+      {error && <p>入力されてない項目があります</p>}
+      
+      <Log records = {records} />
+
+      <p>{sumTime} / 1000(h)</p>
 
     </>
   )
